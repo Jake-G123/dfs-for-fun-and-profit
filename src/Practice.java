@@ -99,22 +99,24 @@ public class Practice {
   }
 
   private <T> Set<Vertex<T>> leaves(Vertex<T> vertex, Set<Vertex<T>> visited) {
-    if(vertex == null) {
-      return new HashSet<>();
-    }
-    visited.add(vertex);
-    if(vertex.neighbors == null || vertex.neighbors.size() == 0) {
-      Set<Vertex<T>> leaves = new HashSet<>();
-      leaves.add(vertex);
-      return leaves;
-    } else {
-      for(Vertex<T> neighbor : vertex.neighbors) {
-        return leaves(vertex, visited);
-      }
+    Set<Vertex<T>> result = new HashSet<>();
+
+    if(vertex == null || visited.contains(vertex)) {
+      return result;
     }
 
-    return new HashSet<>();
+    visited.add(vertex);
+
+    if(vertex.neighbors == null || vertex.neighbors.isEmpty()) {
+      result.add(vertex);
+      return result;
+    }
+
+    for(Vertex<T> neighbor : vertex.neighbors) {
+      result.addAll(leaves(neighbor, visited));
+    }
  
+    return result;
   }
 
 
