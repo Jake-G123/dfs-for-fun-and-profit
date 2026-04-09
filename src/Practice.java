@@ -71,13 +71,14 @@ public class Practice {
   }
   
   private static int max(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
-    if (vertex == null || visited.contains(vertex)) return 0;
+    if (vertex == null || visited.contains(vertex)) return Integer.MIN_VALUE;
     visited.add(vertex);
     int max = Integer.MIN_VALUE;
-    if (max > vertex.data) max = vertex.data;
+    if (max < vertex.data) max = vertex.data;
     for (Vertex<Integer> neighbor : vertex.neighbors) {
       int x = max(neighbor, visited);
-      if (x > max) max = x;
+      if(max < x)
+        max = x;
     }
     return max;
   }
