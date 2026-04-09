@@ -99,24 +99,22 @@ public class Practice {
   }
 
   private <T> Set<Vertex<T>> leaves(Vertex<T> vertex, Set<Vertex<T>> visited) {
-    Set<Vertex<T>> result = new HashSet<>();
-
-    if(vertex == null || visited.contains(vertex)) {
-      return result;
+    if(vertex == null) {
+      return new HashSet<>();
     }
-
     visited.add(vertex);
-
-    if(vertex.neighbors == null || vertex.neighbors.isEmpty()) {
-      result.add(vertex);
-      return result;
+    if(vertex.neighbors == null || vertex.neighbors.size() == 0) {
+      Set<Vertex<T>> leaves = new HashSet<>();
+      leaves.add(vertex);
+      return leaves;
+    } else {
+      for(Vertex<T> neighbor : vertex.neighbors) {
+        return leaves(vertex, visited);
+      }
     }
 
-    for(Vertex<T> neighbor : vertex.neighbors) {
-      result.addAll(leaves(neighbor, visited));
-    }
+    return new HashSet<>();
  
-    return result;
   }
 
 
@@ -159,6 +157,10 @@ public class Practice {
    * @throws NullPointerException if either start or end is null.
    */
   public boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end) {
+    return hasStrictlyIncreasingPath(start, end, new HashSet<>());
+  }
+
+  private boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> visited) {
     return false;
   }
 }
