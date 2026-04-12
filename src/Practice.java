@@ -95,26 +95,29 @@ public class Practice {
    * @return A set containing all reachable leaf vertices, or an empty set if vertex is null.
    */
   public <T> Set<Vertex<T>> leaves(Vertex<T> vertex) {
-    return leaves(vertex, new HashSet<>());
+    Set<Vertex<T>> leaves = new HashSet<>();
+    if(vertex == null) {
+      return leaves;
+    }
+    leaves(vertex, new HashSet<>(), leaves);
+    return leaves;
   }
 
-  private <T> Set<Vertex<T>> leaves(Vertex<T> vertex, Set<Vertex<T>> visited) {
-    if(vertex == null) {
-      return new HashSet<>();
-    }
-    visited.add(vertex);
-    if(vertex.neighbors == null || vertex.neighbors.size() == 0) {
-      Set<Vertex<T>> leaves = new HashSet<>();
-      leaves.add(vertex);
-      return leaves;
-    } else {
-      for(Vertex<T> neighbor : vertex.neighbors) {
-        return leaves(vertex, visited);
-      }
+  private <T> void leaves(Vertex<T> vertex, Set<Vertex<T>> visited, Set<Vertex<T>> leaves) {
+    if(visited.contains(vertex)) {
+      return;
     }
 
-    return new HashSet<>();
- 
+    visited.add(vertex);
+
+    if(vertex.neighbors == null || vertex.neighbors.size() == 0) {
+      leaves.add(vertex);
+      return;
+    }
+
+    for(Vertex<T> neighbor : vertex.neighbors) {
+      leaves(neighbor, visited, leaves);
+    }
   }
 
 
@@ -161,6 +164,22 @@ public class Practice {
   }
 
   private boolean hasStrictlyIncreasingPath(Vertex<Integer> start, Vertex<Integer> end, Set<Vertex<Integer>> visited) {
+    if(start == null || end == null) {
+      throw new NullPointerException();
+    }
+
+    if(start.equals(end)) return true;
+
+    visited.add(start);
+
+    for(Vertex<Integer> neighbor : start.neighbors) {
+      if(!visited.contains(neighbor) && neighbor.data > start.data) {
+        if(hasStrictlyIncreasingPath(neighbor, end, visited)) {
+          return true;
+        }
+      }
+    }
+    
     return false;
   }
 }
